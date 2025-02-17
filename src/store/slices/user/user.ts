@@ -6,7 +6,6 @@ interface UserState {
     email: string | null,
     password: string | null,
     photo: string | null;
-    dayOfBirth: number | null;
   }
   
   const initialState: UserState = {
@@ -15,7 +14,6 @@ interface UserState {
     email: null,
     password: null,
     photo: null,
-    dayOfBirth: null,
   };
 
 const userSlice = createSlice({
@@ -27,7 +25,6 @@ const userSlice = createSlice({
             state.id = user.id;
             state.name = user.name;
             state.email = user.email;
-            state.dayOfBirth = user.dayOfBirth;
             state.photo = user.photo;
         },
     }

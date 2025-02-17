@@ -9,7 +9,7 @@ import { useSnackbar } from "notistack";
 import { useTheme } from "@mui/material";
 import { setCredentials } from "../../store/slices/auth/auth";
 import { useRegisterUserMutation, useSendCodeMutation, useVerifyCodeMutation } from "../../store/slices/auth/authApi";
-import CodeWindow from "./codeWindow";
+import Google from "../../component/Google";
 const Register = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [registerUser] = useRegisterUserMutation()
@@ -50,7 +50,7 @@ const Register = () => {
             }
         } catch (err) {
             console.log(err)
-            enqueueSnackbar((err as any)?.data?.message || (err as any)?.data , { variant: 'error' });
+            enqueueSnackbar((err as any)?.data?.message || (err as any)?.data, { variant: 'error' });
         }
     };
 
@@ -60,12 +60,9 @@ const Register = () => {
             const response = await verifyCode({ email: userRegister.email, code }).unwrap();
 
             console.log(response)
-            if (response) {
-                const { accessToken } = response;
-                if (accessToken) {
-                    dispatch(setCredentials({ accessToken }));
-                    enqueueSnackbar('Verification successful!', { variant: 'success' });
-                }
+            if (response && response.accessToken && response.user) {
+                dispatch(setCredentials({ accessToken: response.accessToken, user: response.user }));
+                enqueueSnackbar('Verification successful!', { variant: 'success' });
             }
         } catch (err) {
             enqueueSnackbar((err as any)?.data?.message || 'Verification failed', { variant: 'error' });
@@ -206,6 +203,9 @@ const Register = () => {
                         flexDirection={"column"}
                         justifyContent={"space-around"}
                     >
+                        <Box display={"flex"} justifyContent={"center"}>
+                            <Google />
+                        </Box>
                         <Button
                             variant="contained"
                             fullWidth
@@ -214,6 +214,7 @@ const Register = () => {
                         >
                             Sign up
                         </Button>
+                        
                     </Box>
                 </Box>}
             <Box

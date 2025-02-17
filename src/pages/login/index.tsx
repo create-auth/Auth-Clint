@@ -2,32 +2,35 @@ import { Box, Button, colors, Link, TextField } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
-import { useSnackbar  } from 'notistack';
+import { useSnackbar } from 'notistack';
 import { useDispatch } from "react-redux";
 import React, { useState } from 'react';
 import { useTheme } from "@mui/material";
 import { useLoginUserMutation } from "../../store/slices/auth/authApi";
 import { setCredentials } from "../../store/slices/auth/auth";
+import Google from "../../component/Google";
 const Login: React.FC = () => {
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: ""
   })
   const theme = useTheme();
-  
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const [ loginUser ] = useLoginUserMutation();
-  
+  const [loginUser] = useLoginUserMutation();
+
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSignIn = async () => {
     try {
       const response = await loginUser(loginForm).unwrap();
-      const { accessToken } = response;
+      const { user, accessToken } = response;
+      const { refreshToken, provider, providerId, verified, ...userWithoutrefresh } = response.user;
+      console.log(userWithoutrefresh)
       if (accessToken) {
-        dispatch(setCredentials({ accessToken }));
+        dispatch(setCredentials({ user: userWithoutrefresh, accessToken: accessToken }));
         enqueueSnackbar('Login successful!', { variant: 'success' });
       } else {
         throw new Error('Access token not found in response');
@@ -54,7 +57,7 @@ const Login: React.FC = () => {
           <Box width={"50%"} height={"25%"}>
             <Box pb={"20px"} fontSize={19}>
               Welcome to Quiz app
-            </Box> 
+            </Box>
             <Box fontSize={50}>Sign<span style={{ color: theme.palette.primary.main }}>in</span></Box>
           </Box>
           <Box width={"37%"} height={"25%"}>
@@ -77,7 +80,7 @@ const Login: React.FC = () => {
               label="Enter email"
               variant="standard"
               fullWidth
-              onChange={(e) => setLoginForm({...loginForm, email: e.target.value})}
+              onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
             />
           </Box>
           <Box display={"flex"} alignItems={"center"}>
@@ -88,7 +91,7 @@ const Login: React.FC = () => {
               autoComplete="current-password"
               variant="standard"
               fullWidth
-              onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}
+              onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
             />
             <Box pt={2} px={1}>
               {isPasswordVisible ? (
@@ -103,8 +106,11 @@ const Login: React.FC = () => {
           <Box display={"flex"} justifyContent={"end"}>
           </Box>
           <Button variant="contained" fullWidth sx={{ textTransform: "none" }} onClick={handleSignIn}>
-          Sign in
+            Sign in
           </Button>
+          <Box display={"flex"} justifyContent={"center"}>
+            <Google />
+          </Box>
         </Box>
       </Box>
       <Box

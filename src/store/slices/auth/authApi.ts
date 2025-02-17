@@ -10,16 +10,33 @@ interface LoginUser {
   email: string;
   password: string;
 }
-
+interface User {
+  id: string | null,
+  name: string | null,
+  email: string | null,
+  password: string | null,
+  refreshToken: string | null,
+  provider: string | null,
+  providerId: string | null,
+  verified: boolean | null,
+  photo: string | null;
+}
+interface UserState {
+  id: string | null,
+  name: string | null,
+  email: string | null,
+  password: string | null,
+  photo: string | null;
+}
 interface LoginResponse {
   accessToken: string;
-  newUser: boolean;
+  user: UserState;
 }
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
 
-    registerUser: builder.mutation<LoginResponse, RegisterUser>({
+    registerUser: builder.mutation<any, RegisterUser>({
       query: (credentials: RegisterUser) => ({
         url: 'auth/register',
         method: 'POST',
@@ -31,7 +48,7 @@ export const authApi = apiSlice.injectEndpoints({
           console.log(data);
           
           if (data && data.accessToken) {
-            dispatch(setCredentials({ accessToken: data.accessToken, newUser: data.newUser }));
+            dispatch(setCredentials({ accessToken: data.accessToken, newUser: data.user }));
           }
         } catch (error) {
           console.error('Register failed:', error);
@@ -53,7 +70,7 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    verifyCode: builder.mutation<LoginResponse, any>({
+    verifyCode: builder.mutation<any, any>({
       query: (EmailAndCode: any) => ({
         url: 'verify/verify-code',
         method: 'POST',
@@ -65,7 +82,7 @@ export const authApi = apiSlice.injectEndpoints({
           console.log(data);
 
           if (data && data.accessToken) {
-            dispatch(setCredentials({ accessToken: data.accessToken, newUser: data.newUser }));
+            dispatch(setCredentials({ accessToken: data.accessToken, newUser: data.user }));
           }
 
         } catch (error) {
@@ -73,7 +90,7 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    loginUser: builder.mutation<LoginResponse, LoginUser>({
+    loginUser: builder.mutation<any, LoginUser>({
       query: (credentials: LoginUser) => ({
         url: 'auth/login',
         method: 'POST',
@@ -82,12 +99,29 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
           if (data && data.accessToken) {
-            dispatch(setCredentials({ accessToken: data.accessToken, newUser: data.newUser }));
+            dispatch(setCredentials({ accessToken: data.accessToken, newUser: data.user }));
           }
         } catch (error) {
           console.error('Login failed:', error);
+        }
+      },
+    }),
+    googleAuth: builder.mutation<any, void>({
+      query: () => ({
+        url: 'social/google',
+        method: 'GET',
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data && data.accessToken) {
+            dispatch(setCredentials({ accessToken: data.accessToken, newUser: data.user }));
+          } else {
+            console.error('Google login failed: No access token found');
+          }
+        } catch (error) {
+          console.error('Login With Google failed:', error);
         }
       },
     }),
@@ -116,4 +150,4 @@ export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
 });
 
-export const { useRegisterUserMutation, useSendCodeMutation, useVerifyCodeMutation, useLoginUserMutation, useSendLogOutMutation, useRefreshMutation } = authApi;
+export const { useRegisterUserMutation, useSendCodeMutation, useVerifyCodeMutation, useLoginUserMutation, useGoogleAuthMutation, useSendLogOutMutation, useRefreshMutation } = authApi;
