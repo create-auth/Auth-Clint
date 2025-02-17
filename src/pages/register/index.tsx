@@ -10,6 +10,7 @@ import { useTheme } from "@mui/material";
 import { setCredentials } from "../../store/slices/auth/auth";
 import { useRegisterUserMutation, useSendCodeMutation, useVerifyCodeMutation } from "../../store/slices/auth/authApi";
 import Google from "../../component/Google";
+import GitHub from "../../component/GitHub";
 const Register = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [registerUser] = useRegisterUserMutation()
@@ -205,6 +206,7 @@ const Register = () => {
                     >
                         <Box display={"flex"} justifyContent={"center"}>
                             <Google />
+                            <GitHub/>
                         </Box>
                         <Button
                             variant="contained"

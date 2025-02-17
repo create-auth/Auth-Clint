@@ -9,6 +9,7 @@ import { useTheme } from "@mui/material";
 import { useLoginUserMutation } from "../../store/slices/auth/authApi";
 import { setCredentials } from "../../store/slices/auth/auth";
 import Google from "../../component/Google";
+import GitHub from "../../component/GitHub";
 const Login: React.FC = () => {
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -110,6 +111,7 @@ const Login: React.FC = () => {
           </Button>
           <Box display={"flex"} justifyContent={"center"}>
             <Google />
+            <GitHub/>
           </Box>
         </Box>
       </Box>
