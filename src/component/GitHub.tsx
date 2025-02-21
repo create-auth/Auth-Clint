@@ -1,4 +1,3 @@
-import React from 'react'
 import { Box, IconButton } from '@mui/material'
 import GitHubIcon from '../assets/GitHub.png'
 export default function GitHub() {

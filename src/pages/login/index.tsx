@@ -1,7 +1,6 @@
-import { Box, Button, colors, Link, TextField } from "@mui/material";
+import { Box, Button, Link, TextField } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useNavigate } from "react-router-dom";
 import { useSnackbar } from 'notistack';
 import { useDispatch } from "react-redux";
 import React, { useState } from 'react';
@@ -10,6 +9,7 @@ import { useLoginUserMutation } from "../../store/slices/auth/authApi";
 import { setCredentials } from "../../store/slices/auth/auth";
 import Google from "../../component/Google";
 import GitHub from "../../component/GitHub";
+import FaceBook from "../../component/Facebook";
 const Login: React.FC = () => {
   const [loginForm, setLoginForm] = useState({
     email: "",
@@ -27,7 +27,7 @@ const Login: React.FC = () => {
   const handleSignIn = async () => {
     try {
       const response = await loginUser(loginForm).unwrap();
-      const { user, accessToken } = response;
+      const { accessToken } = response;
       const { refreshToken, provider, providerId, verified, ...userWithoutrefresh } = response.user;
       console.log(userWithoutrefresh)
       if (accessToken) {
@@ -112,6 +112,7 @@ const Login: React.FC = () => {
           <Box display={"flex"} justifyContent={"center"}>
             <Google />
             <GitHub/>
+            <FaceBook/>
           </Box>
         </Box>
       </Box>

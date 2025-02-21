@@ -1,7 +1,7 @@
 import { Box, Button, Link, TextField } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // import { useRegisterUserMutation } from "../../store/slices/auth/authApi";
 // import { setCredentials } from "../../store/slices/auth/auth";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,7 @@ import { setCredentials } from "../../store/slices/auth/auth";
 import { useRegisterUserMutation, useSendCodeMutation, useVerifyCodeMutation } from "../../store/slices/auth/authApi";
 import Google from "../../component/Google";
 import GitHub from "../../component/GitHub";
+import FaceBook from "../../component/Facebook";
 const Register = () => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [registerUser] = useRegisterUserMutation()
@@ -207,6 +208,7 @@ const Register = () => {
                         <Box display={"flex"} justifyContent={"center"}>
                             <Google />
                             <GitHub/>
+                            <FaceBook/>
                         </Box>
                         <Button
                             variant="contained"

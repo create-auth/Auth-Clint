@@ -1,5 +1,4 @@
 // theme.js
-import { colors } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 
 export const getTheme = () => {
@@ -11,8 +10,6 @@ export const getTheme = () => {
       secondary: {
         main: '#ffebcd',
         dark: '#1c1c1c',
-        dark1: '#393737',
-        dark2: '#545353',
       },
       divider: "#bdbdbd",
     },

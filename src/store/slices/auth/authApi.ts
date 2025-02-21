@@ -10,7 +10,7 @@ interface LoginUser {
   email: string;
   password: string;
 }
-interface User {
+/* interface User {
   id: string | null,
   name: string | null,
   email: string | null,
@@ -20,7 +20,7 @@ interface User {
   providerId: string | null,
   verified: boolean | null,
   photo: string | null;
-}
+} */
 interface UserState {
   id: string | null,
   name: string | null,
@@ -42,7 +42,7 @@ export const authApi = apiSlice.injectEndpoints({
         method: 'POST',
         body: credentials,
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           console.log(data);
@@ -61,7 +61,7 @@ export const authApi = apiSlice.injectEndpoints({
         method: 'POST',
         body: {email},
       }),
-      async onQueryStarted(arg, { queryFulfilled }) {
+      async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           console.log(data);
@@ -76,7 +76,7 @@ export const authApi = apiSlice.injectEndpoints({
         method: 'POST',
         body: EmailAndCode,
       }),
-      async onQueryStarted(arg, {dispatch, queryFulfilled }) {
+      async onQueryStarted(_arg, {dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           console.log(data);
@@ -96,7 +96,7 @@ export const authApi = apiSlice.injectEndpoints({
         method: 'POST',
         body: credentials,
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           if (data && data.accessToken) {
@@ -112,7 +112,7 @@ export const authApi = apiSlice.injectEndpoints({
         url: 'social/google',
         method: 'GET',
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           if (data && data.accessToken) {
@@ -130,7 +130,7 @@ export const authApi = apiSlice.injectEndpoints({
         url: 'auth/logout',
         method: 'POST',
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(logOut());

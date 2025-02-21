@@ -6,36 +6,41 @@ import { useNavigate } from "react-router-dom";
 
 
 export const IsAuth = () => {
-    const Token = useSelector(selectCurrentToken);
-    const User = useSelector(selectCurrentUser);
+  const Token = useSelector(selectCurrentToken);
+  const User = useSelector(selectCurrentUser);
 
-    return Token && User ? true : false;
+  return Token && User ? true : false;
 }
 export const NavigationHandler = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const token = queryParams.get('token');
+    const userParam = queryParams.get('user');
   
-    useEffect(() => {
-      const queryParams = new URLSearchParams(window.location.search);
-      const token = queryParams.get('token');
-      const user = JSON.parse(queryParams.get('user') || '{}');
-      console.log(token, user);
+    try {
+      const user = userParam ? JSON.parse(userParam) : {};
       if (token) {
-        dispatch(setCredentials({ accessToken: token, user: user }));
+        dispatch(setCredentials({ accessToken: token, user }));
         navigate('/');
       }
-    }, [dispatch, navigate]);
-  
-    return null;
-  }
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+    }
+  }, [dispatch, navigate]);
+
+  return null;
+}
 export const useAuth = () => {
-    const Token = useSelector(selectCurrentToken);
-    const User = useSelector(selectCurrentUser);
+  const Token = useSelector(selectCurrentToken);
+  const User = useSelector(selectCurrentUser);
 
-    useEffect(() => {
-        console.log(Token);
-        console.log(User);
-    }, [Token, User]);
+  useEffect(() => {
+    console.log(Token);
+    console.log(User);
+  }, [Token, User]);
 
-    return { Token, User, isAuthed: Token && User ? true : false };
+  return { Token, User, isAuthed: Token && User ? true : false };
 }

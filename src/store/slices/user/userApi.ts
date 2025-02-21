@@ -15,7 +15,7 @@ export const userSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     getUserById: builder.query<UserState, string>({
       query: () => `user/`,
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           dispatch(getUserById(data));

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, BrowserRouter, Route, Navigate } from "react-router-dom";
 import Login from './pages/login';
 import { CssBaseline, ThemeProvider, useTheme } from '@mui/material';
@@ -23,6 +22,9 @@ function App() {
             <Route path="/login" element={isAuthed ? <Navigate to="/" /> : <Login />} />
             <Route path="/" element={isAuthed ? <Home /> : <Navigate to="/login" />} />
             <Route path="/register" element={isAuthed ? <Navigate to="/" /> : <Register />} />
+            <Route path="github/callback" element={null} />
+            <Route path="google/callback" element={null} />
+            <Route path="facebook/callback" element={null} />
           </Routes>
         </BrowserRouter>
       </SnackbarProvider>

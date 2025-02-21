@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material";
@@ -6,7 +5,7 @@ import { useGetProductsQuery } from '../../store/slices/product/productApi';
 
 const Home = () => {
     const [isTopBar, setIsTopBar] = useState(false);
-    const { data: products, error, isLoading } = useGetProductsQuery();
+    const { data: products } = useGetProductsQuery();
     useEffect(() => {
         if (products) {
             console.log(products);
