@@ -1,11 +1,34 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material";
 import { useGetProductsQuery } from '../../store/slices/product/productApi';
+import { useDispatch } from "react-redux";
+import { useRefreshMutation, useSendLogOutMutation } from "../../store/slices/auth/authApi";
+import { logOut, selectCurrentUser, setCredentials } from "../../store/slices/auth/auth";
+import { useSelector } from "react-redux";
 
 const Home = () => {
     const [isTopBar, setIsTopBar] = useState(false);
     const { data: products } = useGetProductsQuery();
+    const [sendLogOut] = useSendLogOutMutation();
+    const [refresh] = useRefreshMutation();
+    const user = useSelector(selectCurrentUser);
+
+    const dispatch = useDispatch();
+
+    const handleLogOut = () => {
+        sendLogOut();
+        dispatch(logOut());
+    }
+    const handleRefresh = async () => {
+        const result = await refresh();
+
+        if ("data" in result && result.data) {
+            dispatch(setCredentials({ accessToken: result.data.accessToken, user }));
+        } else {
+            console.error("Refresh failed:", result.error);
+        }
+    }
     useEffect(() => {
         if (products) {
             console.log(products);
@@ -79,7 +102,7 @@ const Home = () => {
                     bgcolor={"divider"}
                 />
             </Box>
-            <Box display={"flex"} height={"100vh"} bgcolor={"divider"} borderTop={1} borderColor={"secondary.dark"} padding={2}>
+            <Box display={"flex"} flexDirection={"column"} height={"100vh"} bgcolor={"divider"} borderTop={1} borderColor={"secondary.dark"} padding={2}>
                 <Box sx={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -90,6 +113,8 @@ const Home = () => {
                     fontSize: 50,
                     color: theme.palette.primary.main,
                 }}>You Are Now logged in</Box>
+                <Button onClick={handleRefresh} sx={{ fontSize: 20, color: theme.palette.primary.main, height: "20px" }}>Refresh</Button>
+                <Button onClick={handleLogOut} sx={{ fontSize: 20, color: theme.palette.primary.main, height: "20px" }}>LogOut</Button>
             </Box>
         </Box>
     );

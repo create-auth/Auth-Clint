@@ -33,6 +33,10 @@ interface LoginResponse {
   user: UserState;
 }
 
+interface RefreshResponse {
+  accessToken: string;
+}
+
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
 
@@ -45,8 +49,6 @@ export const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
-          
           if (data && data.accessToken) {
             dispatch(setCredentials({ accessToken: data.accessToken, newUser: data.user }));
           }
@@ -57,14 +59,13 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     sendCode: builder.mutation<LoginResponse, string>({
       query: (email: string) => ({
-        url: 'verify/send-code',
+        url: 'auth/verify/send-code',
         method: 'POST',
         body: {email},
       }),
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
         } catch (error) {
           console.error('Couldnt send the code to your email:', error);
         }
@@ -72,15 +73,13 @@ export const authApi = apiSlice.injectEndpoints({
     }),
     verifyCode: builder.mutation<any, any>({
       query: (EmailAndCode: any) => ({
-        url: 'verify/verify-code',
+        url: 'auth/verify/verify-code',
         method: 'POST',
         body: EmailAndCode,
       }),
       async onQueryStarted(_arg, {dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data);
-
           if (data && data.accessToken) {
             dispatch(setCredentials({ accessToken: data.accessToken, newUser: data.user }));
           }
@@ -140,7 +139,7 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    refresh: builder.mutation<void, void>({
+    refresh: builder.mutation<RefreshResponse, void>({
       query: () => ({
         url: 'auth/refresh',
         method: 'GET',

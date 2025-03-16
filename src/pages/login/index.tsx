@@ -29,7 +29,6 @@ const Login: React.FC = () => {
       const response = await loginUser(loginForm).unwrap();
       const { accessToken } = response;
       const { refreshToken, provider, providerId, verified, ...userWithoutrefresh } = response.user;
-      console.log(userWithoutrefresh)
       if (accessToken) {
         dispatch(setCredentials({ user: userWithoutrefresh, accessToken: accessToken }));
         enqueueSnackbar('Login successful!', { variant: 'success' });
@@ -37,7 +36,7 @@ const Login: React.FC = () => {
         throw new Error('Access token not found in response');
       }
     } catch (err) {
-      enqueueSnackbar((err as any)?.data?.message || (err as any)?.data || 'Login failed', { variant: 'error' });
+      enqueueSnackbar((err as any)?.data?.error || (err as any)?.data, { variant: 'error' });
     }
   };
 

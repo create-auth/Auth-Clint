@@ -3,6 +3,7 @@ import { selectCurrentToken, selectCurrentUser, setCredentials } from "../store/
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { enqueueSnackbar } from "notistack";
 
 
 export const IsAuth = () => {
@@ -17,17 +18,21 @@ export const NavigationHandler = () => {
 
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
-    const token = queryParams.get('token');
-    const userParam = queryParams.get('user');
-  
+    const URLtoken = queryParams.get('token');
+    const URLuserParam = queryParams.get('user');
+    
     try {
+      const token = decodeURIComponent(URLtoken || '');
+      const userParam = decodeURIComponent(URLuserParam || '');
+  
       const user = userParam ? JSON.parse(userParam) : {};
       if (token) {
         dispatch(setCredentials({ accessToken: token, user }));
+        enqueueSnackbar('Login successful!', { variant: 'success' });
         navigate('/');
       }
     } catch (error) {
-      console.error('Error parsing user data:', error);
+      enqueueSnackbar('Login failed!', { variant: 'error' });
     }
   }, [dispatch, navigate]);
 
@@ -36,11 +41,6 @@ export const NavigationHandler = () => {
 export const useAuth = () => {
   const Token = useSelector(selectCurrentToken);
   const User = useSelector(selectCurrentUser);
-
-  useEffect(() => {
-    console.log(Token);
-    console.log(User);
-  }, [Token, User]);
 
   return { Token, User, isAuthed: Token && User ? true : false };
 }

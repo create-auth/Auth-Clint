@@ -18,14 +18,14 @@ body,
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(252, 195, 149);
+  background: rgb(20, 97, 217);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(255, 178, 115);
+  background: rgb(20, 97, 217);
 }
-::selection {
-  background-color: rgb(255, 178, 115);
+/* ::selection {
+  background-color: rgb(20, 97, 217);
   color: #ffffff;
-}
+} */

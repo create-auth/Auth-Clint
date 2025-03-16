@@ -39,9 +39,7 @@ const Register = () => {
                 if (response) {
                     setCodeWindow(true);
                     const email = (response as any).user.email;
-                    console.log(email)
                     const codeResponse = await sendCode(email).unwrap();
-                    console.log(codeResponse)
                     enqueueSnackbar((codeResponse as any)?.message, { variant: 'success' });
                 }
                 const { accessToken } = response;
@@ -51,17 +49,14 @@ const Register = () => {
                 }
             }
         } catch (err) {
-            console.log(err)
             enqueueSnackbar((err as any)?.data?.message || (err as any)?.data, { variant: 'error' });
         }
     };
 
     const VerifyCode = async () => {
         try {
-            console.log({ email: userRegister.email, code })
             const response = await verifyCode({ email: userRegister.email, code }).unwrap();
 
-            console.log(response)
             if (response && response.accessToken && response.user) {
                 dispatch(setCredentials({ accessToken: response.accessToken, user: response.user }));
                 enqueueSnackbar('Verification successful!', { variant: 'success' });
